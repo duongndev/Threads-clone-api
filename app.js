@@ -6,6 +6,7 @@ import errorMiddleware from "./middleware/error.middleware.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { config } from "dotenv";
+import logger from "morgan";
 
 // load env variables
 config();
@@ -15,6 +16,10 @@ const app = express();
 
 // Middleware for parsing request
 app.use(express.json());
+
+// Middleware for logging requests
+app.use(logger("dev"));
+
 
 // parsing encoded url
 app.use(
