@@ -32,13 +32,13 @@ app.use(
 app.use(cookieParser());
 
 // enable cors
-// app.use(
-//   cors({
-//     origin: [process.env.FRONTEND_URL],
-//     methods: ["POST", "GET", "PUT", "DELETE"],
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: [process.env.FRONTEND_URL],
+    methods: ["POST", "GET", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 // Handle authentication routes
 app.use("/api/v1/auth", authRoutes);
