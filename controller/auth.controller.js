@@ -93,12 +93,12 @@ const register = asyncHandler(async (req, res, next) => {
   // Generating jwt token
   const token = await user.generateToken();
 
-  res.cookie("token", token, cookieOptions);
+  // res.cookie("token", token, cookieOptions);
 
   res.status(201).json({
     success: true,
     message: "Registered successfully!",
-    user,
+    data: user,
   });
 });
 
@@ -133,12 +133,12 @@ const login = asyncHandler(async (req, res, next) => {
   // Generate token
   const token = await userExists.generateToken();
 
-  res.cookie("token", token, cookieOptions);
+  // res.cookie("token", token, cookieOptions);
 
   res.status(200).json({
     success: true,
     message: "Loggedin successfully",
-    user: userExists,
+    data: token,
   });
 });
 
@@ -208,7 +208,6 @@ const changePassword = asyncHandler(async (req, res, next) => {
  *  @ACESS (Public)
  */
 const forgotPassword = asyncHandler(async (req, res, next) => {
-
   const { email } = req.body;
 
   if (!email) {
@@ -271,10 +270,12 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     .update(resetToken)
     .digest("hex");
 
-  const user = await userModel.findOne({
-    resetPasswordToken,
-    resetPasswordExpiry: { $gt: Date.now() },
-  }).select("+password");
+  const user = await userModel
+    .findOne({
+      resetPasswordToken,
+      resetPasswordExpiry: { $gt: Date.now() },
+    })
+    .select("+password");
 
   if (!user) {
     return next(
@@ -300,9 +301,15 @@ const resetPassword = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: "Password reset successfully!"
-  })
-})
+    message: "Password reset successfully!",
+  });
+});
 
-
-export { register, login, logout, changePassword, forgotPassword, resetPassword };
+export {
+  register,
+  login,
+  logout,
+  changePassword,
+  forgotPassword,
+  resetPassword,
+};
